@@ -27,8 +27,7 @@ class Cycle extends Model {
         'dataSignaturaDual',
     ];
 
-    public function professionalFamily(): BelongsTo
-    {
+    public function professionalFamily(): BelongsTo {
         return $this->belongsTo(Student::class,'departamento','id');
     }
 

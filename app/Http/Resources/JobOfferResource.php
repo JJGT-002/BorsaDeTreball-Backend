@@ -7,13 +7,20 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobOfferResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'company_id' => $this->company_id,
+            'observations' => $this->observations,
+            'description' => $this->description,
+            'contractDuration' => $this->contractDuration,
+            'contact' => $this->contact,
+            'registrationMethod' => $this->registrationMethod,
+            'isActive' => $this->isActive,
+            'isDeleted' => $this->isDeleted,
+            'isValid' => $this->isValid,
+        ];
     }
 }

@@ -8,7 +8,7 @@ use App\Http\Resources\CycleCollection;
 use App\Http\Resources\CycleResource;
 use App\Models\Cycle;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -26,7 +26,7 @@ class CycleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CycleRequest $request)
+    public function store(CycleRequest $request): JsonResponse
     {
         try {
             $validatedData = $request->validated();
@@ -60,19 +60,13 @@ class CycleController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Cycle $cycle)
     {
         $cycleResource = new CycleResource($cycle);
         return $this->addStatus($cycleResource);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(CycleRequest $request, Cycle $cycle)
+    public function update(CycleRequest $request, Cycle $cycle): JsonResponse
     {
         try {
             $validatedData = $request->validated();
@@ -107,7 +101,7 @@ class CycleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cycle $cycle)
+    public function destroy(Cycle $cycle): JsonResponse
     {
         try {
             $cycle->delete();

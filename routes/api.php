@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CycleController;
 use App\Http\Controllers\Api\JobOfferController;
+use App\Http\Controllers\Api\OfferCycleController;
 use App\Http\Controllers\Api\ProfessionalFamilyController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\UserController;
@@ -30,3 +31,4 @@ Route::apiResource('students', StudentController::class);
 Route::apiResource('professionalFamilies', ProfessionalFamilyController::class);
 Route::apiResource('cycles', CycleController::class);
 Route::apiResource('jobOffers', JobOfferController::class);
+Route::apiResource('offerCycles', OfferCycleController::class);

@@ -7,13 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class OfferCycleResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'job_offer_id' => $this->job_offer_id,
+            'cycle_id' => $this->cycle_id,
+        ];
     }
 }

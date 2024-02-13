@@ -14,18 +14,13 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CycleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(): CycleCollection
     {
         $cycles = Cycle::paginate(10);
         return new CycleCollection($cycles);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CycleRequest $request): JsonResponse
     {
         try {
@@ -98,9 +93,6 @@ class CycleController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Cycle $cycle): JsonResponse
     {
         try {

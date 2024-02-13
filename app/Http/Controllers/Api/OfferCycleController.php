@@ -3,48 +3,94 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OfferCycleRequest;
+use App\Http\Resources\OfferCycleCollection;
+use App\Http\Resources\OfferCycleResource;
 use App\Models\OfferCycle;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class OfferCycleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(): OfferCycleCollection
     {
-        //
+        $offers = OfferCycle::paginate(10);
+        return new OfferCycleCollection($offers);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(OfferCycleRequest $request): JsonResponse
     {
-        //
+        try {
+            $validatedData = $request->validated();
+            DB::beginTransaction();
+            $offerCycle = new OfferCycle([
+                'job_offer_id' => $validatedData['job_offer_id'],
+                'cycle_id' => $validatedData['cycle_id'],
+            ]);
+            $offerCycle->save();
+            DB::commit();
+            return response()->json([
+                'message' => 'Offer Cycle created successfully',
+                'data' => new OfferCycleResource($offerCycle)
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => 'Failed to create offer cycle',
+                'message' => $e->getMessage()
+            ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(OfferCycle $offerCycle)
     {
-        //
+        $offerCycleResource = new OfferCycleResource($offerCycle);
+        return $this->addStatus($offerCycleResource);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, OfferCycle $offerCycle)
+    public function update(OfferCycleRequest $request, OfferCycle $offerCycle): JsonResponse
     {
-        //
+        try {
+            $validatedData = $request->validated();
+
+            $offerCycle->job_offer_id = $validatedData['job_offer_id'];
+            $offerCycle->cycle_id = $validatedData['cycle_id'];
+
+            $offerCycle->save();
+
+            return response()->json([
+                'message' => 'Offer Cycle updated successfully',
+                'data' => new OfferCycleResource($offerCycle)
+            ], ResponseAlias::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Failed to update cycle',
+                'message' => $e->getMessage()
+            ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(OfferCycle $offerCycle)
+    public function destroy(OfferCycle $offerCycle): JsonResponse
     {
-        //
+        try {
+            $offerCycle->delete();
+            return response()->json([
+                'message' => 'Offer Cycle deleted successfully',
+                'data' => $offerCycle->id
+            ]);
+        } catch (Exception) {
+            return response()->json([
+                'error' => 'Cycle not found'
+            ], 404);
+        }
+    }
+
+    private function addStatus($resource) {
+        $data = $resource->toArray(request());
+        $data['status'] = 'success';
+        return $data;
     }
 }

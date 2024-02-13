@@ -47,12 +47,6 @@ class StudentCycleController extends Controller
         }
     }
 
-    public function show(StudentCycle $studentCycle)
-    {
-        $studentCycleResource = new StudentCycleResource($studentCycle);
-        return $this->addStatus($studentCycleResource);
-    }
-
     public function update(StudentCycleRequest $request, StudentCycle $studentCycle)
     {
         try {

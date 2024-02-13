@@ -14,6 +14,20 @@ class CycleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'departamento' => $this->departamento,
+            'tipo' => $this->tipo,
+            'normativa' => $this->normativa,
+            'titol' => $this->titol,
+            'rd' => $this->rd,
+            'rd2' => $this->rd2,
+            'vliteral' => $this->vliteral,
+            'cliteral' => $this->cliteral,
+            'horasFct' => $this->horasFct,
+            'acronim' => $this->acronim,
+            'llocTreball' => $this->llocTreball,
+            'dataSignaturaDual' => $this->dataSignaturaDual,
+        ];
     }
 }

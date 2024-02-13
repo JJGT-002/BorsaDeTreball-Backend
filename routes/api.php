@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\ProfessionalFamilyController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -24,3 +25,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('users',UserController::class);
 Route::apiResource('companies', CompanyController::class);
 Route::apiResource('students', StudentController::class);
+Route::apiResource('professionalFamilies', ProfessionalFamilyController::class);

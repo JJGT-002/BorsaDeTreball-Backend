@@ -14,6 +14,12 @@ class ProfessionalFamilyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'cliteral' => $this->cliteral,
+            'vliteral' => $this->vliteral,
+            'depcurt' => $this->depcurt,
+            'didactico' => $this->didactico,
+        ];
     }
 }

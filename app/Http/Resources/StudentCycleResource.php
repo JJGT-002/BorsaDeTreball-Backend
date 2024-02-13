@@ -7,13 +7,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudentCycleResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'cycle_id' => $this->cycle_id,
+            'student_id' => $this->student_id,
+            'endDate' => $this->endDate,
+            'isValid' => $this->isValid,
+        ];
     }
 }

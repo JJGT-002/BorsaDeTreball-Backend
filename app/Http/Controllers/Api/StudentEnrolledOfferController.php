@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class StudentEnrolledOfferController extends Controller
 {
 
-    public function index()
+    public function index(): StudentEnrolledOfferCollection
     {
         $studentEnrolledOffers = StudentEnrolledOffer::paginate(10);
         return new StudentEnrolledOfferCollection($studentEnrolledOffers);
@@ -26,7 +26,7 @@ class StudentEnrolledOfferController extends Controller
         try {
             $validatedData = $request->validated();
             DB::beginTransaction();
-            $studentEnrolledOffer = new ([
+            $studentEnrolledOffer = new StudentEnrolledOffer([
                 'student_id' => $validatedData['student_id'],
                 'job_offer_id' => $validatedData['job_offer_id'],
             ]);

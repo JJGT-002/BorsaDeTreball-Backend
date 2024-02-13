@@ -13,7 +13,7 @@ class CompaniesSeeder extends Seeder {
 
         foreach ($users as $user) {
             Company::factory()->create([
-                'id' => $user->id,
+                'user_id' => $user->id,
             ]);
         }
     }

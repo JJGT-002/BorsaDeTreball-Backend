@@ -8,13 +8,13 @@ return new class extends Migration {
 
     public function up(): void {
         Schema::create('companies', function (Blueprint $table) {
-            $table->foreignId('id')->constrained('users')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
-            $table->string('cif');
+            $table->string('cif',9)->unique();
             $table->string('contactName');
             $table->string('companyWeb');
 
-            $table->primary('id');
             $table->timestamps();
         });
     }

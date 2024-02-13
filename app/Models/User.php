@@ -36,10 +36,10 @@ class User extends Authenticatable {
     ];
 
     public function student(): BelongsTo {
-        return $this->belongsTo(Student::class,'id','id');
+        return $this->belongsTo(Student::class,'id','user_id');
     }
 
     public function company(): BelongsTo {
-        return $this->belongsTo(Company::class,'id','id');
+        return $this->belongsTo(Company::class,'id','user_id');
     }
 }

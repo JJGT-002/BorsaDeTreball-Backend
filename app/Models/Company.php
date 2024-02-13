@@ -11,6 +11,7 @@ class Company extends Model {
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'name',
         'cif',
         'contactName',
@@ -18,6 +19,6 @@ class Company extends Model {
     ];
 
     public function user(): BelongsTo {
-        return $this->belongsTo(User::class,'id','id');
+        return $this->belongsTo(User::class,'user_id','id');
     }
 }

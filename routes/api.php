@@ -27,11 +27,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::apiResource('cycles', CycleController::class);
 Route::apiResource('users',UserController::class);
 Route::apiResource('companies', CompanyController::class);
 Route::apiResource('students', StudentController::class);
 Route::apiResource('professionalFamilies', ProfessionalFamilyController::class);
-Route::apiResource('cycles', CycleController::class);
 Route::apiResource('jobOffers', JobOfferController::class);
 Route::apiResource('offerCycles', OfferCycleController::class);
 Route::apiResource('studentEnrolledOffers', StudentEnrolledOfferController::class);

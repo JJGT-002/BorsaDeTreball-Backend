@@ -8,9 +8,9 @@ class CompanyFactory extends Factory {
 
     public function definition(): array
     {
-        $sociedadType = $this->faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'P', 'Q', 'S']);
+        $sociedadType = $this->faker->randomElement(['A', 'B']);
         $cifNumber = str_pad($this->faker->randomNumber(7), 7, '0', STR_PAD_LEFT);
-        $lastCharacter = $this->faker->randomElement(array_merge(range(0, 9), range('A', 'Z')));
+        $lastCharacter = $this->faker->randomElement(['A', 'B']);
         return [
             'name' => $this->faker->company,
             'cif' => $sociedadType . $cifNumber . $lastCharacter,

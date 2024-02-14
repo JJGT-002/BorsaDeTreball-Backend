@@ -17,6 +17,7 @@ class Student extends Model {
         'surnames',
         'urlCV',
         'isActivated',
+        //'cycle_id'
     ];
 
     public function user(): BelongsTo {
@@ -24,7 +25,7 @@ class Student extends Model {
     }
 
     public function cycle(): BelongsToMany {
-        return $this->belongsToMany(Cycle::class, 'student_cycles', 'student_id', 'cycle_id');
+        return $this->belongsToMany(Cycle::class, 'student_cycles', 'student_id', 'cycle_id')->withPivot('endDate');
     }
 
     public function jobOffer(): BelongsToMany {

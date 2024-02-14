@@ -13,31 +13,23 @@ class UserRequest extends FormRequest
 
     public function rules(): array
     {
-        $rules = [
-            'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|string|min:4',
-            'address' => 'required|string|max:255',
-            'role' => 'required|string|in:admin,responsible,student,company',
-        ];
-
-        if ($this->isMethod('post') || $this->isMethod('put') || $this->isMethod('patch')) {
-            $rules += [
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            return [
+                'email' => 'nullable|email|unique:users,email|max:255',
+                'password' => 'nullable|string|min:4',
+                'address' => 'nullable|string|max:255',
+                'role' => 'nullable|string|in:admin,responsible,student,company',
                 'accept' => 'nullable|boolean',
                 'observations' => 'nullable|string',
                 'isDeleted' => 'nullable|boolean',
             ];
         }
-
-        if ($this->input('role') === 'company') {
-            $rules += [
-                'name' => 'required|string|max:50',
-                'cif' => 'required|string|size:9|regex:/^[ABCDEFGHJKLMNPQRSUVWX]\d{7}[0-9A-J]$/',
-                'contactName' => 'required|string|max:20',
-                'companyWeb' => 'required|url',
-            ];
-        }
-
-        return $rules;
+        return [
+            'email' => 'required|email|unique:users,email|max:255',
+            'password' => 'required|string|min:4',
+            'address' => 'required|string|max:255',
+            'role' => 'required|string|in:admin,responsible,student,company',
+        ];
     }
 
     public function messages(): array
@@ -60,19 +52,6 @@ class UserRequest extends FormRequest
             'accept.boolean' => 'El campo aceptar debe ser verdadero o falso.',
             'observations.string' => 'El campo observaciones debe ser una cadena de caracteres.',
             'isDeleted.boolean' => 'El campo isDeleted debe ser verdadero o falso.',
-
-            //Mensajes de validación por si el usuario que se crea es una empresa
-            'name.required' => 'El campo nombre es obligatorio.',
-            'name.string' => 'El campo nombre debe ser una cadena de caracteres.',
-            'name.max' => 'El campo nombre no puede ser mayor que :max caracteres.',
-            'cif.required' => 'El campo CIF es obligatorio.',
-            'cif.string' => 'El campo CIF debe ser una cadena de caracteres.',
-            'cif.regex' => 'El CIF introducido no es válido.',
-            'contactName.required' => 'El campo nombre de contacto es obligatorio.',
-            'contactName.string' => 'El campo nombre de contacto debe ser una cadena de caracteres.',
-            'contactName.max' => 'El campo nombre de contacto no puede ser mayor que :max caracteres.',
-            'companyWeb.required' => 'El campo web de la compañía es obligatorio.',
-            'companyWeb.url' => 'El campo web de la compañía debe ser una URL válida.',
         ];
     }
 }

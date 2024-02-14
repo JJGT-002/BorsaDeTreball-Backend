@@ -9,29 +9,40 @@ class CompanyRequest extends FormRequest {
         return true;
     }
 
-    public function rules() {
-        $rules = [
-            'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|string|min:4',
-            'address' => 'required|string|max:255',
-        ];
-
-        if ($this->isMethod('post') || $this->isMethod('put') || $this->isMethod('patch')) {
-            $rules += [
-                'accept' => 'nullable|boolean',
-                'observations' => 'nullable|string',
-                'isDeleted' => 'nullable|boolean',
+    public function rules()
+    {
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            return [
+                'email' => 'nullable|email|unique:users,email|max:255',
+                'password' => 'nullable|string|min:4',
+                'address' => 'nullable|string|max:255',
+                'name' => 'nullable|string|max:50',
+                'cif' => [
+                    'nullable',
+                    'string',
+                    'size:9',
+                    'regex:/^[AB]\d{7}[0-9A-B]$/',
+                ],
+                'contactName' => 'nullable|string|max:20',
+                'companyWeb' => 'nullable|url',
             ];
         }
 
-        $rules += [
+        return [
+            'email' => 'required|email|unique:users,email|max:255',
+            'password' => 'required|string|min:4',
+            'address' => 'required|string|max:255',
             'name' => 'required|string|max:50',
-            'cif' => 'required|string|size:9|regex:/^[ABCDEFGHJKLMNPQRSUVW]\d{7}[0-9A-J]$/',
+            'cif' => [
+                'required',
+                'string',
+                'size:9',
+                'regex:/^[AB]\d{7}[0-9A-B]$/',
+                'unique:companies,cif'
+            ],
             'contactName' => 'required|string|max:20',
             'companyWeb' => 'required|url',
         ];
-
-        return $rules;
     }
 
     public function messages() {
@@ -58,6 +69,7 @@ class CompanyRequest extends FormRequest {
             'cif.required' => 'El campo CIF es obligatorio.',
             'cif.string' => 'El campo CIF debe ser una cadena de caracteres.',
             'cif.regex' => 'El CIF introducido no es válido.',
+            'cif.unique' => 'Ya hay una empresa con este CIF.',
             'contactName.required' => 'El campo nombre de contacto es obligatorio.',
             'contactName.string' => 'El campo nombre de contacto debe ser una cadena de caracteres.',
             'contactName.max' => 'El campo nombre de contacto no puede ser mayor que :max caracteres.',

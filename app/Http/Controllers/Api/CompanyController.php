@@ -40,6 +40,7 @@ class CompanyController extends Controller {
                 'companyWeb' => $validatedData['companyWeb'],
             ]);
             $company->save();
+
             DB::commit();
             return response()->json([
                 'message' => 'Company created successfully',
@@ -63,10 +64,11 @@ class CompanyController extends Controller {
         try {
             $validatedData = $request->validated();
 
-            $company->name = $validatedData['name'];
-            $company->cif = $validatedData['cif'];
-            $company->contactName = $validatedData['contactName'];
-            $company->companyWeb = $validatedData['companyWeb'];
+            foreach ($validatedData as $key => $value) {
+                if (isset($validatedData[$key])) {
+                    $company->$key = $value;
+                }
+            }
 
             $company->save();
 

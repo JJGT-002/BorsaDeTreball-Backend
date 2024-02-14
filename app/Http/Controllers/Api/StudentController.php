@@ -7,6 +7,7 @@ use App\Http\Requests\StudentRequest;
 use App\Http\Resources\StudentCollection;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
+use App\Models\StudentCycle;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -23,23 +24,28 @@ class StudentController extends Controller {
 
     public function store(StudentRequest $request): JsonResponse {
         try {
-            $validatedData = $request->validated();
             DB::beginTransaction();
             $user = new User([
-                'email' => $validatedData['email'],
-                'password' => bcrypt($validatedData['password']),
-                'address' => $validatedData['address'],
+                'email' => $request['email'],
+                'password' => bcrypt($request['password']),
+                'address' => $request['address'],
                 'role' => 'student',
             ]);
             $user->save();
 
             $student = new Student([
                 'user_id' => $user->id,
-                'name' => $validatedData['name'],
-                'surnames' => $validatedData['surnames'],
-                'urlCV' => $validatedData['urlCV'],
+                'name' => $request['name'],
+                'surnames' => $request['surnames'],
+                'urlCV' => $request['urlCV'],
             ]);
             $student->save();
+
+            if (isset($request['cycle_endDate_ids']) && is_array($request['cycle_endDate_ids'])) {
+                foreach ($request['cycle_endDate_ids'] as $cycles) {
+                    $student->cycle()->attach($cycles['cycle'],['endDate'=>$cycles['endDate']]);
+                }
+            }
             DB::commit();
             return response()->json([
                 'message' => 'Student created successfully',
@@ -64,22 +70,11 @@ class StudentController extends Controller {
         try {
             $validatedData = $request->validated();
 
-            $student->name = $validatedData['name'];
-            $student->surnames = $validatedData['surnames'];
-            $student->urlCV = $validatedData['urlCV'];
-
-            $student->save();
-
-            $user = $student->user();
-
-            $user->update([
-                'email' => $validatedData['email'],
-                'password' => bcrypt($validatedData['password']),
-                'address' => $validatedData['address'],
-                'accept' => $validatedData['accept'] ?? false,
-                'observations' => $validatedData['observations'] ?? 'Sin observaciones',
-                'isDeleted' => $validatedData['isDeleted'] ?? false,
-            ]);
+            foreach ($validatedData as $key => $value) {
+                if (isset($validatedData[$key])) {
+                    $student->$key = $value;
+                }
+            }
 
             return response()->json([
                 'message' => 'Student updated successfully',

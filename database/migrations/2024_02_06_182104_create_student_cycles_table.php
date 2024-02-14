@@ -10,7 +10,7 @@ return new class extends Migration  {
         Schema::create('student_cycles', function (Blueprint $table) {
             $table->foreignId('cycle_id')->constrained('cycles')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
-            $table->year('endDate');
+            $table->year('endDate')->nullable();
             $table->boolean('isValid')->default(0);
             $table->primary(['cycle_id', 'student_id']);
             $table->timestamps();

@@ -14,11 +14,15 @@ return new class extends Migration {
             $table->string('surnames');
             $table->string('urlCV')->nullable();
             $table->boolean('isActivated')->default(0);
+            //$table->foreignId('cycle_id')->nullable()->constrained('cycles')->onDelete('set null');
             $table->timestamps();
         });
     }
 
     public function down(): void {
+        //Schema::table('students', function (Blueprint $table) {
+          //  $table->dropForeign(['cycle_id']);
+        //});
         Schema::dropIfExists('students');
     }
 };

@@ -11,26 +11,31 @@ class StudentRequest extends FormRequest {
     }
 
     public function rules() {
-        $rules = [
-            'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|string|min:4',
-            'address' => 'required|string|max:255',
-        ];
-
-        if ($this->isMethod('post') || $this->isMethod('put') || $this->isMethod('patch')) {
-            $rules += [
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            return ['email' => 'nullable|email|unique:users,email|max:255',
+                'password' => 'nullable|string|min:4',
+                'address' => 'nullable|string|max:255',
+                'name' => 'nullable|string|max:50',
+                'surnames' => 'nullable|string|max:200',
+                'urlCV' => 'nullable|url',
+                'endDate' => 'nullable|numeric',
+                'isValid' => 'nullable|boolean',
                 'accept' => 'nullable|boolean',
                 'observations' => 'nullable|string',
                 'isDeleted' => 'nullable|boolean',
             ];
         }
-
-        $rules += [
+        return [
+            'email' => 'required|email|unique:users,email|max:255',
+            'password' => 'required|string|min:4',
+            'address' => 'required|string|max:255',
             'name' => 'required|string|max:50',
             'surnames' => 'required|string|max:200',
-            'urlCV' => 'required|url',
+            'urlCV' => 'nullable|url',
+            'cycle_endDate_ids' => ['required','array'],
+            'cycle_endDate_ids.*.cycle' => 'required|exists:cycles,id',
+            'cycle_endDate_ids.*.endDate' => ['nullable','numeric']
         ];
-        return $rules;
     }
 
     public function messages() {
@@ -57,8 +62,11 @@ class StudentRequest extends FormRequest {
             'surnames.required' => 'El campo apellidos es obligatorio.',
             'surnames.string' => 'El campo apellidos debe ser una cadena de caracteres.',
             'surnames.max' => 'El campo apellidos no puede ser mayor que :max caracteres.',
-            'urlCV.required' => 'El campo web de la compañía es obligatorio.',
-            'urlCV.url' => 'El campo web de la compañía debe ser una URL válida.',
+            'urlCV.url' => 'El campo currículum del estudiante debe ser una URL válida.',
+            //'endDate.required' => 'El año de finalización es obligatorio.',
+            //'endDate.numeric' => 'El año de finalización debe ser un año (número).',
+            //'cycle_ids.array' => 'El campo cycle_ids debe ser un array.',
+            //'cycle_ids.*.exists' => 'Uno o más elementos de cycle_ids no son válidos.',
         ];
     }
 }

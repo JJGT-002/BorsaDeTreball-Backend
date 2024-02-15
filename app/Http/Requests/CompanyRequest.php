@@ -19,6 +19,7 @@ class CompanyRequest extends FormRequest {
                     'string',
                     'size:9',
                     'regex:/^[AB]\d{7}[0-9A-B]$/',
+                    'unique:companies,cif'
                 ],
                 'contactName' => 'nullable|string|max:20',
                 'companyWeb' => 'nullable|url',

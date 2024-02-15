@@ -24,13 +24,11 @@ class StudentCycleController extends Controller
     public function store(StudentCycleRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validated();
             DB::beginTransaction();
             $studentCycle = new StudentCycle([
-                'cycle_id' => $validatedData['cycle_id'],
-                'student_id' => $validatedData['student_id'],
-                'endDate' => $validatedData['endDate'],
-                'isValid' => $validatedData['isValid'],
+                'cycle_id' => $request['cycle_id'],
+                'student_id' => $request['student_id'],
+                'endDate' => $request['endDate'],
             ]);
             $studentCycle->save();
             DB::commit();
@@ -47,18 +45,10 @@ class StudentCycleController extends Controller
         }
     }
 
-    public function update(StudentCycleRequest $request, StudentCycle $studentCycle)
+    public function update(StudentCycleRequest $request, StudentCycle $studentCycle): JsonResponse
     {
         try {
-            $validatedData = $request->validated();
-
-            $studentCycle->cycle_id = $validatedData['cycle_id'];
-            $studentCycle->student_id = $validatedData['student_id'];
-            $studentCycle->endDate = $validatedData['endDate'];
-            $studentCycle->isValid = $validatedData['isValid'];
-
-            $studentCycle->save();
-
+            $studentCycle->update($request->all());
             return response()->json([
                 'message' => 'Student Cycle updated successfully',
                 'data' => new StudentCycleResource($studentCycle)
@@ -84,11 +74,5 @@ class StudentCycleController extends Controller
                 'error' => 'Student Cycle not found'
             ], 404);
         }
-    }
-
-    private function addStatus($resource) {
-        $data = $resource->toArray(request());
-        $data['status'] = 'success';
-        return $data;
     }
 }

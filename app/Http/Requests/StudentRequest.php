@@ -10,19 +10,21 @@ class StudentRequest extends FormRequest {
         return true;
     }
 
-    public function rules() {
+    public function rules(): array
+    {
         if ($this->isMethod('put') || $this->isMethod('patch')) {
-            return ['email' => 'nullable|email|unique:users,email|max:255',
+            return [
+                'email' => 'nullable|email|unique:users,email|max:255',
                 'password' => 'nullable|string|min:4',
                 'address' => 'nullable|string|max:255',
                 'name' => 'nullable|string|max:50',
                 'surnames' => 'nullable|string|max:200',
                 'urlCV' => 'nullable|url',
-                'endDate' => 'nullable|numeric',
+                'isActivated' => 'nullable|boolean',
+                'cycle_endDate_ids' => ['nullable','array'],
+                'cycle_endDate_ids.*.cycle' => 'nullable|exists:cycles,id',
+                'cycle_endDate_ids.*.endDate' => ['nullable','numeric'],
                 'isValid' => 'nullable|boolean',
-                'accept' => 'nullable|boolean',
-                'observations' => 'nullable|string',
-                'isDeleted' => 'nullable|boolean',
             ];
         }
         return [
@@ -38,7 +40,8 @@ class StudentRequest extends FormRequest {
         ];
     }
 
-    public function messages() {
+    public function messages(): array
+    {
         return [
             'email.required' => 'El campo email es obligatorio.',
             'email.email' => 'El campo email debe ser una dirección de correo electrónico válida.',
@@ -63,10 +66,10 @@ class StudentRequest extends FormRequest {
             'surnames.string' => 'El campo apellidos debe ser una cadena de caracteres.',
             'surnames.max' => 'El campo apellidos no puede ser mayor que :max caracteres.',
             'urlCV.url' => 'El campo currículum del estudiante debe ser una URL válida.',
-            //'endDate.required' => 'El año de finalización es obligatorio.',
-            //'endDate.numeric' => 'El año de finalización debe ser un año (número).',
-            //'cycle_ids.array' => 'El campo cycle_ids debe ser un array.',
-            //'cycle_ids.*.exists' => 'Uno o más elementos de cycle_ids no son válidos.',
+            'cycle_endDate_ids.required' => 'Es obligatorio que un alumno tenga ciclos.',
+            'cycle_endDate_ids.array' => 'El campo cycle_endDate_ids debe ser un array.',
+            'cycle_endDate_ids.*.cycle.exists' => 'Uno o más elementos de cycle_endDate_ids no son válidos.',
+            'cycle_endDate_ids.*.endDate.numeric' => 'La fecha debe ser un número.'
         ];
     }
 }

@@ -17,7 +17,6 @@ class Student extends Model {
         'surnames',
         'urlCV',
         'isActivated',
-        //'cycle_id'
     ];
 
     public function user(): BelongsTo {

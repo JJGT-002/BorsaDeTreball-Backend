@@ -9,13 +9,10 @@ class CompanyRequest extends FormRequest {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             return [
-                'email' => 'nullable|email|unique:users,email|max:255',
-                'password' => 'nullable|string|min:4',
-                'address' => 'nullable|string|max:255',
                 'name' => 'nullable|string|max:50',
                 'cif' => [
                     'nullable',
@@ -45,7 +42,8 @@ class CompanyRequest extends FormRequest {
         ];
     }
 
-    public function messages() {
+    public function messages(): array
+    {
         return [
             'email.required' => 'El campo email es obligatorio.',
             'email.email' => 'El campo email debe ser una dirección de correo electrónico válida.',

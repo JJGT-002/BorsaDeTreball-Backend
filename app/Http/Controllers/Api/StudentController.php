@@ -11,7 +11,9 @@ use App\Models\StudentCycle;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class StudentController extends Controller {
@@ -30,6 +32,8 @@ class StudentController extends Controller {
                 'password' => bcrypt($request['password']),
                 'address' => $request['address'],
                 'role' => 'student',
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(10),
             ]);
             $user->save();
 
@@ -44,6 +48,11 @@ class StudentController extends Controller {
             if (isset($request['cycle_endDate_ids']) && is_array($request['cycle_endDate_ids'])) {
                 foreach ($request['cycle_endDate_ids'] as $cycles) {
                     $student->cycle()->attach($cycles['cycle'],['endDate'=>$cycles['endDate']]);
+
+                    StudentCycle::where([
+                        'student_id' => $student->id,
+                        'cycle_id' => $cycles['cycle']
+                    ])->update(['created_at' => Carbon::now()]);
                 }
             }
             DB::commit();
@@ -68,14 +77,7 @@ class StudentController extends Controller {
     public function update(StudentRequest $request, Student $student): JsonResponse
     {
         try {
-            $validatedData = $request->validated();
-
-            foreach ($validatedData as $key => $value) {
-                if (isset($validatedData[$key])) {
-                    $student->$key = $value;
-                }
-            }
-
+            $student->update($request->all());
             return response()->json([
                 'message' => 'Student updated successfully',
                 'data' => new StudentResource($student)
@@ -85,21 +87,6 @@ class StudentController extends Controller {
                 'error' => 'Failed to update student',
                 'message' => $e->getMessage()
             ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function destroy(Student $student): JsonResponse
-    {
-        try {
-            $student->delete();
-            return response()->json([
-                'message' => 'Student deleted successfully',
-                'data' => $student->id
-            ]);
-        } catch (Exception) {
-            return response()->json([
-                'error' => 'Student not found'
-            ], 404);
         }
     }
 

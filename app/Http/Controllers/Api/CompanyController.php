@@ -11,6 +11,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CompanyController extends Controller {
@@ -22,22 +23,23 @@ class CompanyController extends Controller {
 
     public function store(CompanyRequest $request): JsonResponse {
         try {
-            $validatedData = $request->validated();
             DB::beginTransaction();
             $user = new User([
-                'email' => $validatedData['email'],
-                'password' => bcrypt($validatedData['password']),
-                'address' => $validatedData['address'],
+                'email' => $request['email'],
+                'password' => bcrypt($request['password']),
+                'address' => $request['address'],
                 'role' => 'company',
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(10),
             ]);
             $user->save();
 
             $company = new Company([
                 'user_id' => $user->id,
-                'name' => $validatedData['name'],
-                'cif' => $validatedData['cif'],
-                'contactName' => $validatedData['contactName'],
-                'companyWeb' => $validatedData['companyWeb'],
+                'name' => $request['name'],
+                'cif' => $request['cif'],
+                'contactName' => $request['contactName'],
+                'companyWeb' => $request['companyWeb'],
             ]);
             $company->save();
 
@@ -62,16 +64,7 @@ class CompanyController extends Controller {
 
     public function update(CompanyRequest $request, Company $company): JsonResponse {
         try {
-            $validatedData = $request->validated();
-
-            foreach ($validatedData as $key => $value) {
-                if (isset($validatedData[$key])) {
-                    $company->$key = $value;
-                }
-            }
-
-            $company->save();
-
+            $company->update($request->all());
             return response()->json([
                 'message' => 'Company updated successfully',
                 'data' => new CompanyResource($company)
@@ -81,20 +74,6 @@ class CompanyController extends Controller {
                 'error' => 'Failed to update company',
                 'message' => $e->getMessage()
             ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function destroy(Company $company): JsonResponse {
-        try {
-            $company->delete();
-            return response()->json([
-                'message' => 'Company deleted successfully',
-                'data' => $company->id
-            ]);
-        } catch (Exception) {
-            return response()->json([
-                'error' => 'Company not found'
-            ], 404);
         }
     }
 

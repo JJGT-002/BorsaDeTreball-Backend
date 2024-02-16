@@ -39,7 +39,7 @@ class CompanyRequest extends FormRequest {
                 'unique:companies,cif'
             ],
             'contactName' => 'required|string|max:20',
-            'companyWeb' => 'required|url',
+            'companyWeb' => 'nullable|url',
         ];
     }
 

@@ -18,7 +18,6 @@ class UserRequest extends FormRequest
                 'email' => 'nullable|email|unique:users,email|max:255',
                 'password' => 'nullable|string|min:4',
                 'address' => 'nullable|string|max:255',
-                'role' => 'nullable|string|in:admin,responsible,student,company',
                 'accept' => 'nullable|boolean',
                 'observations' => 'nullable|string',
                 'isDeleted' => 'nullable|boolean',
@@ -28,7 +27,7 @@ class UserRequest extends FormRequest
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:4',
             'address' => 'required|string|max:255',
-            'role' => 'required|string|in:admin,responsible,student,company',
+            'accept' => 'required|accepted',
         ];
     }
 
@@ -46,10 +45,8 @@ class UserRequest extends FormRequest
             'address.required' => 'El campo dirección es obligatorio.',
             'address.string' => 'El campo dirección debe ser una cadena de caracteres.',
             'address.max' => 'El campo dirección no puede ser mayor que :max caracteres.',
-            'role.required' => 'El campo rol es obligatorio.',
-            'role.string' => 'El campo rol debe ser una cadena de caracteres.',
-            'role.in' => 'El campo rol debe ser uno de: admin, responsible, student, company.',
-            'accept.boolean' => 'El campo aceptar debe ser verdadero o falso.',
+            'accept.required' => 'El campo de condiciones de uso se debe de cumplimentar.',
+            'accept.accepted' => 'Se deben aceptar las condiciones de uso.',
             'observations.string' => 'El campo observaciones debe ser una cadena de caracteres.',
             'isDeleted.boolean' => 'El campo isDeleted debe ser verdadero o falso.',
         ];

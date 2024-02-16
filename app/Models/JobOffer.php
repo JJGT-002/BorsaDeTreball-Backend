@@ -12,6 +12,7 @@ class JobOffer extends Model {
     use HasFactory;
 
     protected $fillable = [
+        'company_id',
         'observations',
         'description',
         'contractDuration',

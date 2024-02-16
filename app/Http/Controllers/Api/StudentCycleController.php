@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentCycleRequest;
-use App\Http\Resources\StudentCycleCollection;
+use App\Http\Resources\DefaultCollection;
 use App\Http\Resources\StudentCycleResource;
 use App\Models\StudentCycle;
 use Exception;
@@ -12,17 +12,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class StudentCycleController extends Controller
-{
+class StudentCycleController extends Controller {
 
-    public function index(): StudentCycleCollection
-    {
+    public function index(): DefaultCollection {
         $studentCycle = StudentCycle::paginate(10);
-        return new StudentCycleCollection($studentCycle);
+        return new DefaultCollection($studentCycle);
     }
 
-    public function store(StudentCycleRequest $request): JsonResponse
-    {
+    public function store(StudentCycleRequest $request): JsonResponse {
         try {
             DB::beginTransaction();
             $studentCycle = new StudentCycle([
@@ -45,8 +42,7 @@ class StudentCycleController extends Controller
         }
     }
 
-    public function update(StudentCycleRequest $request, StudentCycle $studentCycle): JsonResponse
-    {
+    public function update(StudentCycleRequest $request, StudentCycle $studentCycle): JsonResponse {
         try {
             $studentCycle->update($request->all());
             return response()->json([
@@ -58,21 +54,6 @@ class StudentCycleController extends Controller
                 'error' => 'Failed to update student cycle',
                 'message' => $e->getMessage()
             ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function destroy(StudentCycle $studentCycle): JsonResponse
-    {
-        try {
-            $studentCycle->delete();
-            return response()->json([
-                'message' => 'Student Cycle deleted successfully',
-                'data' => $studentCycle->id
-            ]);
-        } catch (Exception) {
-            return response()->json([
-                'error' => 'Student Cycle not found'
-            ], 404);
         }
     }
 }

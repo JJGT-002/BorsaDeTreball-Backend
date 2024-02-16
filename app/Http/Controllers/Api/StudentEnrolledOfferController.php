@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentEnrolledOfferRequest;
+use App\Http\Resources\DefaultCollection;
 use App\Http\Resources\StudentEnrolledOfferCollection;
 use App\Http\Resources\StudentEnrolledOfferResource;
 use App\Models\StudentEnrolledOffer;
@@ -12,23 +13,19 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class StudentEnrolledOfferController extends Controller
-{
+class StudentEnrolledOfferController extends Controller {
 
-    public function index(): StudentEnrolledOfferCollection
-    {
+    public function index(): DefaultCollection {
         $studentEnrolledOffers = StudentEnrolledOffer::paginate(10);
-        return new StudentEnrolledOfferCollection($studentEnrolledOffers);
+        return new DefaultCollection($studentEnrolledOffers);
     }
 
-    public function store(StudentEnrolledOfferRequest $request): JsonResponse
-    {
+    public function store(StudentEnrolledOfferRequest $request): JsonResponse {
         try {
-            $validatedData = $request->validated();
             DB::beginTransaction();
             $studentEnrolledOffer = new StudentEnrolledOffer([
-                'student_id' => $validatedData['student_id'],
-                'job_offer_id' => $validatedData['job_offer_id'],
+                'student_id' => $request['student_id'],
+                'job_offer_id' => $request['job_offer_id'],
             ]);
             $studentEnrolledOffer->save();
             DB::commit();
@@ -45,22 +42,15 @@ class StudentEnrolledOfferController extends Controller
         }
     }
 
-    public function show(StudentEnrolledOffer $studentEnrolledOffer)
-    {
+    public function show(StudentEnrolledOffer $studentEnrolledOffer) {
         $studentEnrolledOfferResource = new StudentEnrolledOfferResource($studentEnrolledOffer);
         return $this->addStatus($studentEnrolledOfferResource);
     }
 
-    public function update(StudentEnrolledOfferRequest $request, StudentEnrolledOffer $studentEnrolledOffer)
+    public function update(StudentEnrolledOfferRequest $request, StudentEnrolledOffer $studentEnrolledOffer): JsonResponse
     {
         try {
-            $validatedData = $request->validated();
-
-            $studentEnrolledOffer->student_id = $validatedData['student_id'];
-            $studentEnrolledOffer->job_offer_id = $validatedData['job_offer_id'];
-
-            $studentEnrolledOffer->save();
-
+            $studentEnrolledOffer->update($request->all());
             return response()->json([
                 'message' => 'Student Enrolled Offer updated successfully',
                 'data' => new StudentEnrolledOfferResource($studentEnrolledOffer)
@@ -73,8 +63,7 @@ class StudentEnrolledOfferController extends Controller
         }
     }
 
-    public function destroy(StudentEnrolledOffer $studentEnrolledOffer): JsonResponse
-    {
+    public function destroy(StudentEnrolledOffer $studentEnrolledOffer): JsonResponse {
         try {
             $studentEnrolledOffer->delete();
             return response()->json([

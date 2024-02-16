@@ -4,69 +4,55 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class JobOfferRequest extends FormRequest
-{
+class JobOfferRequest extends FormRequest {
 
-    public function authorize(): bool
-    {
+    public function authorize(): bool {
         return true;
     }
 
-    public function rules(): array
-    {
-        $rules = [
-            'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|string|min:4',
-            'address' => 'required|string|max:255',
-        ];
-
-        if ($this->isMethod('post') || $this->isMethod('put') || $this->isMethod('patch')) {
-            $rules += [
-                'accept' => 'nullable|boolean',
-                'observations' => 'nullable|string',
+    public function rules(): array {
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            return [
+                'company_id' => 'nullable|exists:companies,id',
+                'observations' => 'nullable|string|max:255',
+                'description' => 'nullable|string|max:255',
+                'contractDuration' => 'nullable|string',
+                'contact' => 'nullable|string|max:50',
+                'registrationMethod' => 'nullable|in:email,atTheMoment',
+                'isActive' => 'nullable|boolean',
                 'isDeleted' => 'nullable|boolean',
+                'isValid' => 'nullable|boolean',
             ];
         }
-
-        $rules += [
-            'name' => 'required|string|max:50',
-            'cif' => 'required|string|size:9|regex:/^[ABCDEFGHJKLMNPQRSUVW]\d{7}[0-9A-J]$/',
-            'contactName' => 'required|string|max:20',
-            'companyWeb' => 'required|url',
+        return [
+            'company_id' => 'required|exists:companies,id',
+            'observations' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'contractDuration' => 'required|string',
+            'contact' => 'required|string|max:50',
+            'registrationMethod' => 'required|in:email,atTheMoment',
         ];
-
-        return $rules;
     }
 
-    public function messages() {
+    public function messages(): array {
         return [
-            'email.required' => 'El campo email es obligatorio.',
-            'email.email' => 'El campo email debe ser una dirección de correo electrónico válida.',
-            'email.unique' => 'La dirección de correo electrónico ya está en uso.',
-            'email.max' => 'El campo email no puede ser mayor que :max caracteres.',
-            'password.required' => 'El campo contraseña es obligatorio.',
-            'password.string' => 'El campo contraseña debe ser una cadena de caracteres.',
-            'password.min' => 'El campo contraseña debe tener al menos :min caracteres.',
-            'password.confirmed' => 'La confirmación de contraseña no coincide.',
-            'address.required' => 'El campo dirección es obligatorio.',
-            'address.string' => 'El campo dirección debe ser una cadena de caracteres.',
-            'address.max' => 'El campo dirección no puede ser mayor que :max caracteres.',
-            'accept.boolean' => 'El campo aceptar debe ser verdadero o falso.',
-            'observations.string' => 'El campo observaciones debe ser una cadena de caracteres.',
+            'company_id.required' => 'El ID de la empresa es obligatorio.',
+            'company_id.exists' => 'El ID de la empresa no existe en la base de datos.',
+            'observations.required' => 'Las observaciones son obligatorias.',
+            'observations.max' => 'Las observaciones no deben tener más de :max caracteres.',
+            'description.required' => 'La descripción es obligatoria.',
+            'description.max' => 'La descripción no debe tener más de :max caracteres.',
+            'contractDuration.required' => 'La duración del contrato es obligatoria.',
+            'contact.required' => 'El contacto es obligatorio.',
+            'contact.max' => 'El contacto no debe tener más de :max caracteres.',
+            'registrationMethod.required' => 'El método de registro es obligatorio.',
+            'registrationMethod.in' => 'El método de registro seleccionado no es válido.',
+            'isActive.required' => 'El campo isActive es obligatorio.',
+            'isActive.boolean' => 'El campo isActive debe ser verdadero o falso.',
+            'isDeleted.required' => 'El campo isDeleted es obligatorio.',
             'isDeleted.boolean' => 'El campo isDeleted debe ser verdadero o falso.',
-
-            //Mensajes de validación para el company
-            'name.required' => 'El campo nombre es obligatorio.',
-            'name.string' => 'El campo nombre debe ser una cadena de caracteres.',
-            'name.max' => 'El campo nombre no puede ser mayor que :max caracteres.',
-            'cif.required' => 'El campo CIF es obligatorio.',
-            'cif.string' => 'El campo CIF debe ser una cadena de caracteres.',
-            'cif.regex' => 'El CIF introducido no es válido.',
-            'contactName.required' => 'El campo nombre de contacto es obligatorio.',
-            'contactName.string' => 'El campo nombre de contacto debe ser una cadena de caracteres.',
-            'contactName.max' => 'El campo nombre de contacto no puede ser mayor que :max caracteres.',
-            'companyWeb.required' => 'El campo web de la compañía es obligatorio.',
-            'companyWeb.url' => 'El campo web de la compañía debe ser una URL válida.',
+            'isValid.required' => 'El campo isValid es obligatorio.',
+            'isValid.boolean' => 'El campo isValid debe ser verdadero o falso.',
         ];
     }
 }

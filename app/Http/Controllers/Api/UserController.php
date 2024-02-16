@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
-use App\Http\Resources\UserCollection;
+use App\Http\Resources\DefaultCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller {
 
-    public function index(): UserCollection {
+    public function index(): DefaultCollection {
         $users = User::paginate(10);
-        return new UserCollection($users);
+        return new DefaultCollection($users);
     }
 
     public function show(User $user) {

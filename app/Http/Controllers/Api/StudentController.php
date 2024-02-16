@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
-use App\Http\Resources\StudentCollection;
+use App\Http\Resources\DefaultCollection;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Models\StudentCycle;
@@ -18,10 +18,9 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class StudentController extends Controller {
 
-    public function index(): StudentCollection
-    {
+    public function index(): DefaultCollection {
         $students = Student::paginate(10);
-        return new StudentCollection($students);
+        return new DefaultCollection($students);
     }
 
     public function store(StudentRequest $request): JsonResponse {
@@ -74,8 +73,7 @@ class StudentController extends Controller {
         return $this->addStatus($studentResource);
     }
 
-    public function update(StudentRequest $request, Student $student): JsonResponse
-    {
+    public function update(StudentRequest $request, Student $student): JsonResponse {
         try {
             $student->update($request->all());
             return response()->json([

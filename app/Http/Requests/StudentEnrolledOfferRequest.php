@@ -11,7 +11,8 @@ class StudentEnrolledOfferRequest extends FormRequest
         return true;
     }
 
-    public function rules() {
+    public function rules(): array
+    {
         $rules = [
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:4',
@@ -34,7 +35,8 @@ class StudentEnrolledOfferRequest extends FormRequest
         return $rules;
     }
 
-    public function messages() {
+    public function messages(): array
+    {
         return [
             'email.required' => 'El campo email es obligatorio.',
             'email.email' => 'El campo email debe ser una dirección de correo electrónico válida.',

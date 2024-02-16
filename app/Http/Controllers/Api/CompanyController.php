@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
-use App\Http\Resources\CompanyCollection;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\DefaultCollection;
 use App\Models\Company;
 use App\Models\User;
 use Exception;
@@ -16,9 +16,9 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CompanyController extends Controller {
 
-    public function index(): CompanyCollection {
+    public function index(): DefaultCollection {
         $companies = Company::paginate(10);
-        return new CompanyCollection($companies);
+        return new DefaultCollection($companies);
     }
 
     public function store(CompanyRequest $request): JsonResponse {

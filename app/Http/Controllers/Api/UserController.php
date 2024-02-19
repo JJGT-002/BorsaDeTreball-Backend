@@ -3,17 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StudentRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\DefaultCollection;
-use App\Http\Resources\StudentResource;
 use App\Http\Resources\UserResource;
-use App\Models\Student;
-use App\Models\StudentCycle;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -34,6 +29,7 @@ class UserController extends Controller {
                 'address' => $request['address'],
                 'accept' => $request['accept'],
                 'role' => 'responsible',
+                'isActivated' => 1,
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ]);
@@ -91,19 +87,11 @@ class UserController extends Controller {
     public function activarUsuario($id) {
         // Encuentra al usuario por su ID
         $user = User::find($id);
-
-        // Verifica si se encontró al usuario
-        if (!$user) {
-            // Manejar la situación si el usuario no se encuentra
-            return redirect()->route('login')->with('error', 'Usuario no encontrado');
-        }
-
-        // Actualiza el campo 'isActive' del usuario a 1 (activo)
-        $user->isActive = 1;
+        $user->isActivated = 1;
         $user->save();
 
         // Redirige a una página de confirmación o a donde sea necesario
-        return redirect()->route('login')->with('success', 'Tu cuenta ha sido activada exitosamente');
+        //return redirect()->route('login')->with('success', 'Tu cuenta ha sido activada exitosamente');
     }
 
     private function addStatus($resource) {

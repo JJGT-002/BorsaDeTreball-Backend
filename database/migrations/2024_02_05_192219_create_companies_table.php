@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('cif',9)->unique();
             $table->string('contactName');
-            $table->string('companyWeb');
+            $table->string('companyWeb')->nullable();
 
             $table->timestamps();
         });

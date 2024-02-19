@@ -13,9 +13,10 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('address');
-            $table->boolean('accept')->default(0);
+            $table->boolean('accept');
             $table->string('observations')->default('Sin observaciones');
             $table->enum('role',['admin','responsible','student','company']);
+            $table->boolean('isActivated');
             $table->boolean('isDeleted')->default(0);
             $table->rememberToken();
             $table->timestamps();

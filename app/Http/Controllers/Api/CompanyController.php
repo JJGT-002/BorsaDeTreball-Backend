@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\DefaultCollection;
+use App\Mail\ActivationEmail;
 use App\Models\Company;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -28,7 +30,9 @@ class CompanyController extends Controller {
                 'email' => $request['email'],
                 'password' => bcrypt($request['password']),
                 'address' => $request['address'],
+                'accept' => $request['accept'],
                 'role' => 'company',
+                'isActivated' => 0,
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ]);
@@ -42,6 +46,8 @@ class CompanyController extends Controller {
                 'companyWeb' => $request['companyWeb'],
             ]);
             $company->save();
+
+            Mail::to($user->email)->send(new ActivationEmail($user));
 
             DB::commit();
             return response()->json([

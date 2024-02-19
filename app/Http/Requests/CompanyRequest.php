@@ -30,6 +30,7 @@ class CompanyRequest extends FormRequest {
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:4',
             'address' => 'required|string|max:255',
+            'accept' => 'required|accepted',
             'name' => 'required|string|max:50',
             'cif' => [
                 'required',
@@ -57,7 +58,8 @@ class CompanyRequest extends FormRequest {
             'address.required' => 'El campo dirección es obligatorio.',
             'address.string' => 'El campo dirección debe ser una cadena de caracteres.',
             'address.max' => 'El campo dirección no puede ser mayor que :max caracteres.',
-            'accept.boolean' => 'El campo aceptar debe ser verdadero o falso.',
+            'accept.required' => 'El campo de condiciones de uso se debe de cumplimentar.',
+            'accept.accepted' => 'Se deben aceptar las condiciones de uso.',
             'observations.string' => 'El campo observaciones debe ser una cadena de caracteres.',
             'isDeleted.boolean' => 'El campo isDeleted debe ser verdadero o falso.',
 

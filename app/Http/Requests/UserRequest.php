@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -18,7 +18,6 @@ class UserRequest extends FormRequest
                 'email' => 'nullable|email|unique:users,email|max:255',
                 'password' => 'nullable|string|min:4',
                 'address' => 'nullable|string|max:255',
-                'accept' => 'nullable|boolean',
                 'observations' => 'nullable|string',
                 'isDeleted' => 'nullable|boolean',
             ];

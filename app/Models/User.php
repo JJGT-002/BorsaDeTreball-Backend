@@ -19,6 +19,7 @@ class User extends Authenticatable {
         'accept',
         'observations',
         'role',
+        'isActivated',
         'isDeleted',
     ];
 

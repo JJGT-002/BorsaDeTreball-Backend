@@ -17,10 +17,14 @@ class ActivationEmail extends Mailable {
         $this->user = $user;
     }
 
-    public function build() {
+    public function build(): ActivationEmail
+    {
         return $this->view('emails.activation')
             ->with([
-                'userEmail' => $this->user->email,
+                'user' => $this->user,
+                'userName' => ($this->user->role === 'admin') ? 'Administrador' :
+                    (($this->user->role === 'responsible') ? 'Responsable' : (($this->user->role === "student") ?
+                        $this->user->Student->name : $this->user->Company->name)),
                 'activationLink' => route('activate.user', ['id' => $this->user->id]),
             ])
             ->subject('Activa tu cuenta');

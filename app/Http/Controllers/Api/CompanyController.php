@@ -68,6 +68,20 @@ class CompanyController extends Controller {
         return $this->addStatus($companyResource);
     }
 
+    public function destroy(Company $company): JsonResponse {
+        try {
+            $company->delete();
+            return response()->json([
+                'message' => 'Company deleted successfully',
+                'data' => $company->id
+            ]);
+        } catch (Exception) {
+            return response()->json([
+                'error' => 'Company not found'
+            ], 404);
+        }
+    }
+
     public function update(CompanyRequest $request, Company $company): JsonResponse {
         try {
             $company->update($request->all());

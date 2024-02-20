@@ -14,9 +14,9 @@ class StudentRequest extends FormRequest {
     {
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             return [
-                'email' => 'nullable|email|unique:users,email|max:255',
                 'password' => 'nullable|string|min:4',
                 'address' => 'nullable|string|max:255',
+                'accept' => 'required|accepted',
                 'name' => 'nullable|string|max:50',
                 'surnames' => 'nullable|string|max:200',
                 'urlCV' => 'nullable|url',

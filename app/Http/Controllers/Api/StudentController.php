@@ -82,14 +82,27 @@ class StudentController extends Controller {
 
     public function update(StudentRequest $request, Student $student): JsonResponse {
         try {
-            $student->update($request->all());
+            $user = $student->user;
+
+            DB::beginTransaction();
+
+            $student->update($request->except('password', 'accept'));
+
+            $user->update([
+                'password' => bcrypt($request->input('password')),
+                'address' => $request->input('address'),
+            ]);
+
+            DB::commit();
+
             return response()->json([
-                'message' => 'Student updated successfully',
+                'message' => 'Student and user updated successfully',
                 'data' => new StudentResource($student)
             ], ResponseAlias::HTTP_OK);
         } catch (Exception $e) {
+            DB::rollBack();
             return response()->json([
-                'error' => 'Failed to update student',
+                'error' => 'Failed to update student and user',
                 'message' => $e->getMessage()
             ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -15,6 +15,8 @@ class StudentResource extends JsonResource {
             'surnames' => $this->surnames,
             'urlCV' => $this->urlCV,
             'isActivated' => $this->isActivated,
+            'email' => $this->User->email,
+            'address' => $this->User->address,
         ];
     }
 }

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder {
             StudentCyclesSeeder::class,
             StudentEnrolledOffersSeeder::class,
             OfferCyclesSeeder::class,
+            ResponsibleCyclesSeeder::class
         ]);
     }
 }

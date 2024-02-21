@@ -33,11 +33,12 @@ Route::post('login', [LoginController::class,'login']);
 Route::apiResource('cycles', CycleController::class)->only('index');
 Route::apiResource('professionalFamilies', ProfessionalFamilyController::class)->only('index');
 Route::apiResource('students', StudentController::class)->only('store');
+Route::apiResource('companies', CompanyController::class)->only('store');
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('professionalFamilies', ProfessionalFamilyController::class)->except('index');
     Route::apiResource('cycles', CycleController::class)->except('index');
     Route::apiResource('users',UserController::class);
-    Route::apiResource('companies', CompanyController::class);
+    Route::apiResource('companies', CompanyController::class)->except('store');
     Route::apiResource('students', StudentController::class)->except('store');
     Route::apiResource('jobOffers', JobOfferController::class);
     Route::apiResource('offerCycles', OfferCycleController::class);

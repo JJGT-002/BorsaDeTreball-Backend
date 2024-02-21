@@ -44,6 +44,7 @@ class StudentController extends Controller {
 
             $user->forceFill([
                 'token' => $token,
+                'email_verified_at' => now(),
             ])->save();
 
             $student = new Student([

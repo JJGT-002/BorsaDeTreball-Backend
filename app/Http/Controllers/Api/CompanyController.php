@@ -33,7 +33,6 @@ class CompanyController extends Controller {
                 'accept' => $request['accept'],
                 'role' => 'company',
                 'isActivated' => 0,
-                'email_verified_at' => now(),
             ]);
             $user->save();
 
@@ -43,6 +42,7 @@ class CompanyController extends Controller {
 
             $user->forceFill([
                 'token' => $token,
+                'email_verified_at' => now(),
             ])->save();
 
             $company = new Company([

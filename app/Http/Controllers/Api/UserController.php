@@ -34,7 +34,6 @@ class UserController extends Controller {
                 'accept' => $request['accept'],
                 'role' => 'responsible',
                 'isActivated' => 1,
-                'email_verified_at' => now(),
                 'token' => $token,
             ]);
             $user->save();

@@ -32,18 +32,18 @@ class LoginController extends Controller {
 
         $user = User::where('email', $request->email)->firstOrFail();
 
-        $type = 0;
         if ($user->role === 'student') {
-            $type = $user->Student;
+            $idType = $user->Student->id;
         } else if ($user->role === 'company') {
-            $type = $user->Company;
-        } else if ($user->role === 'admin') {
+            $idType = $user->Company->id;
+        } else {
+            $idType = $user->id;
         }
 
         return response()->json([
             'token' => $user->token,
             'role' => $user->role,
-            'idType' => $type->id,
+            'idType' => $idType,
             'id' => $user->id
         ]);
     }

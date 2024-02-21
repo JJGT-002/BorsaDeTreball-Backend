@@ -34,9 +34,16 @@ class CompanyController extends Controller {
                 'role' => 'company',
                 'isActivated' => 0,
                 'email_verified_at' => now(),
-                'remember_token' => Str::random(10),
             ]);
             $user->save();
+
+            do {
+                $token = $user->createToken('Personal Access Token')->plainTextToken;
+            } while (User::where('token', $token)->exists());
+
+            $user->forceFill([
+                'token' => $token,
+            ])->save();
 
             $company = new Company([
                 'user_id' => $user->id,
@@ -84,9 +91,21 @@ class CompanyController extends Controller {
 
     public function update(CompanyRequest $request, Company $company): JsonResponse {
         try {
-            $company->update($request->all());
+            $user = $company->user;
+
+            DB::beginTransaction();
+
+            $company->update($request->except('password', 'accept'));
+
+            $user->update([
+                'password' => bcrypt($request->input('password')),
+                'address' => $request->input('address'),
+            ]);
+
+            DB::commit();
+
             return response()->json([
-                'message' => 'Company updated successfully',
+                'message' => 'Company and user updated successfully',
                 'data' => new CompanyResource($company)
             ], ResponseAlias::HTTP_OK);
         } catch (Exception $e) {

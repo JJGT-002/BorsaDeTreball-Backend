@@ -35,10 +35,16 @@ class StudentController extends Controller {
                 'accept' => $request['accept'],
                 'role' => 'student',
                 'isActivated' => 0,
-                'email_verified_at' => now(),
-                'remember_token' => Str::random(10),
             ]);
             $user->save();
+
+            do {
+                $token = $user->createToken('Personal Access Token')->plainTextToken;
+            } while (User::where('token', $token)->exists());
+
+            $user->forceFill([
+                'token' => $token,
+            ])->save();
 
             $student = new Student([
                 'user_id' => $user->id,
@@ -86,11 +92,12 @@ class StudentController extends Controller {
 
             DB::beginTransaction();
 
-            $student->update($request->except('password', 'accept'));
+            $student->update($request->except('password', 'accept','isActivated'));
 
             $user->update([
                 'password' => bcrypt($request->input('password')),
                 'address' => $request->input('address'),
+                'isActivated' => $request->input('isActivated')
             ]);
 
             DB::commit();

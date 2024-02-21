@@ -23,6 +23,10 @@ class UserController extends Controller {
     public function store(UserRequest $request): JsonResponse {
         try {
             DB::beginTransaction();
+            do {
+                $numbers = str_pad(mt_rand(0, 99), 2, '0', STR_PAD_LEFT);
+                $token = $numbers . '|' . Str::random(40);
+            } while (User::where('token', $token)->exists());
             $user = new User([
                 'email' => $request['email'],
                 'password' => bcrypt($request['password']),
@@ -31,7 +35,7 @@ class UserController extends Controller {
                 'role' => 'responsible',
                 'isActivated' => 1,
                 'email_verified_at' => now(),
-                'remember_token' => Str::random(10),
+                'token' => $token,
             ]);
             $user->save();
 
@@ -84,14 +88,11 @@ class UserController extends Controller {
         }
     }
 
-    public function activarUsuario($id) {
-        // Encuentra al usuario por su ID
+    public function activarUsuario($id): void
+    {
         $user = User::find($id);
         $user->isActivated = 1;
         $user->save();
-
-        // Redirige a una página de confirmación o a donde sea necesario
-        //return redirect()->route('login')->with('success', 'Tu cuenta ha sido activada exitosamente');
     }
 
     private function addStatus($resource) {

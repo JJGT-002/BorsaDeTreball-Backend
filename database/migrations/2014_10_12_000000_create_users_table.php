@@ -16,9 +16,9 @@ return new class extends Migration {
             $table->boolean('accept');
             $table->string('observations')->default('Sin observaciones');
             $table->enum('role',['admin','responsible','student','company']);
-            $table->boolean('isActivated');
+            $table->boolean('isActivated')->nullable();
             $table->boolean('isDeleted')->default(0);
-            $table->rememberToken();
+            $table->string('token', 100)->nullable()->default(null)->unique();
             $table->timestamps();
         });
     }

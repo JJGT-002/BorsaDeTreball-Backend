@@ -15,6 +15,8 @@ class CompanyResource extends JsonResource {
             'cif' => $this->cif,
             'contactName' => $this->contactName,
             'companyWeb' => $this->companyWeb,
+            'email' => $this->User->email,
+            'address' => $this->User->address,
         ];
     }
 }

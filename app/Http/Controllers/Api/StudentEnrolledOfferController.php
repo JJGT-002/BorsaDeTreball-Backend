@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentEnrolledOfferRequest;
 use App\Http\Resources\DefaultCollection;
-use App\Http\Resources\StudentEnrolledOfferCollection;
 use App\Http\Resources\StudentEnrolledOfferResource;
 use App\Models\StudentEnrolledOffer;
 use Exception;

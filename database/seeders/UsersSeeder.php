@@ -12,6 +12,10 @@ class UsersSeeder extends Seeder {
         User::factory()->count(98)->create([
             'isActivated' => 1
         ]);
+        do {
+            $numbers = str_pad(mt_rand(0, 99), 2, '0', STR_PAD_LEFT);
+            $tokenResponsible = $numbers . '|' . Str::random(40);
+        } while (User::where('token', $tokenResponsible)->exists());
         User::create([
             'email' => 'primo@gmail.com',
             'password' => bcrypt('1234'),
@@ -20,8 +24,12 @@ class UsersSeeder extends Seeder {
             'role' => 'responsible',
             'isActivated' => 1,
             'email_verified_at' => now(),
-            'remember_token' => Str::random(10),
+            'token' => $tokenResponsible,
         ]);
+        do {
+            $numbers = str_pad(mt_rand(0, 99), 2, '0', STR_PAD_LEFT);
+            $tokenAdmin = $numbers . '|' . Str::random(40);
+        } while (User::where('token', $tokenAdmin)->exists());
         User::create([
             'email' => 'jorub@gmail.com',
             'password' => bcrypt('1234'),
@@ -30,7 +38,7 @@ class UsersSeeder extends Seeder {
             'role' => 'admin',
             'isActivated' => 1,
             'email_verified_at' => now(),
-            'remember_token' => Str::random(10),
+            'token' => $tokenAdmin,
         ]);
     }
 }

@@ -7,21 +7,32 @@ use App\Models\ResponsibleCycle;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class ResponsibleCyclesSeeder extends Seeder {
+class ResponsibleCyclesSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $allCycles = Cycle::all();
+        $allResponsibles = User::where('role', 'responsible')->get();
 
-    public function run(): void {
-        $allCyclesIds = Cycle::pluck('id');
-        $allResponsiblesIds = User::where('role', 'responsible')->pluck('id');
-
-        foreach ($allResponsiblesIds as $responsableId) {
-            $number = rand(1,4);
-            $cyclesIds = $allCyclesIds->shuffle()->take($number);
-            foreach ($cyclesIds as $cycleId) {
-                ResponsibleCycle::factory()->create([
-                    'responsible_id' => $responsableId,
-                    'cycle_id' => $cycleId,
-                ]);
-            }
+        if ($allCycles->isEmpty() || $allResponsibles->isEmpty()) {
+            $this->command->warn('No hay ciclos o responsables, no se pueden asignar responsables a ciclos.');
+            return;
         }
+
+        foreach ($allCycles as $cycle) {
+            $responsible = $allResponsibles->random();
+
+            if (!$cycle->responsibles->isEmpty()) {
+                $this->command->warn("El ciclo {$cycle->id} ya tiene un responsable asignado.");
+                continue;
+            }
+
+            ResponsibleCycle::factory()->create([
+                'responsible_id' => $responsible->id,
+                'cycle_id' => $cycle->id,
+            ]);
+        }
+
+        $this->command->info('Se han asignado responsables a todos los ciclos.');
     }
 }

@@ -10,7 +10,7 @@ return new class extends Migration  {
         Schema::create('job_offers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('set null');
-            $table->string('observations');
+            $table->string('observations')->nullable();
             $table->string('description');
             $table->string('contractDuration');
             $table->string('contact');

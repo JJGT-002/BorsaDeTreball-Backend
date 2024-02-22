@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\StudentCycleController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +34,14 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('activate/user/{id}', [UserController::class, 'activarUsuario'])->name('activate.user');
+Route::resource('companies', CompanyController::class);
+Route::resource('users', \App\Http\Controllers\UserController::class);
+Route::resource('jobOffers', JobOfferController::class);
 
+Route::get('jobOffers/indexByCompany/{id}', [JobOfferController::class, 'indexByCompany'])->name('jobOffers.indexByCompany');
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.callback');
+
+Route::get('/responsible/students/{responsibleId}', [StudentCycleController::class, 'getStudentsByResponsibleCycleId'])->name('responsible.students');
 
 require __DIR__.'/auth.php';

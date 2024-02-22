@@ -93,7 +93,7 @@ class StudentController extends Controller {
 
             DB::beginTransaction();
 
-            $student->update($request->except('password', 'accept','isActivated'));
+            $student->update($request->except('password', 'address','isActivated'));
 
             $user->update([
                 'password' => bcrypt($request->input('password')),

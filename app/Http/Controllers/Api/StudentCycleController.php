@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentCycleRequest;
 use App\Http\Resources\DefaultCollection;
 use App\Http\Resources\StudentCycleResource;
+use App\Models\Cycle;
+use App\Models\ResponsibleCycle;
+use App\Models\Student;
 use App\Models\StudentCycle;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -55,5 +58,14 @@ class StudentCycleController extends Controller {
                 'message' => $e->getMessage()
             ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function getStudentsByResponsibleCycleId($responsibleId) {
+        $cycleId = ResponsibleCycle::where('responsible_id', $responsibleId)->value('cycle_id');
+        $cycle = Cycle::find($cycleId);
+
+        $students = $cycle->student;
+
+        return view('studentCycle.index', compact('students'));
     }
 }

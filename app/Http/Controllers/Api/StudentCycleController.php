@@ -10,6 +10,7 @@ use App\Models\Cycle;
 use App\Models\ResponsibleCycle;
 use App\Models\Student;
 use App\Models\StudentCycle;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -60,12 +61,17 @@ class StudentCycleController extends Controller {
         }
     }
 
+    public function getResponsibles() {
+        $responsibles = User::where('role', 'responsible')->get();
+        return view('responsibles.index', compact('responsibles'));
+    }
+
     public function getStudentsByResponsibleCycleId($responsibleId) {
         $cycleId = ResponsibleCycle::where('responsible_id', $responsibleId)->value('cycle_id');
         $cycle = Cycle::find($cycleId);
 
         $students = $cycle->student;
 
-        return view('studentCycle.index', compact('students'));
+        return view('studentCycles.index', compact('students'));
     }
 }

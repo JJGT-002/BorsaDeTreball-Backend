@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CycleResource;
 use App\Http\Resources\DefaultCollection;
 use App\Models\Cycle;
+use App\Models\User;
 
 class CycleController extends Controller {
 
@@ -23,5 +24,15 @@ class CycleController extends Controller {
         $data = $resource->toArray(request());
         $data['status'] = 'success';
         return $data;
+    }
+
+    public function getCyclesByResponsibleUserId($userId) {
+        // Obtener el usuario responsable
+        $user = User::findOrFail($userId);
+
+        // Obtener los ciclos asociados al usuario responsable
+        $cycles = $user->cycles;
+
+        return view('responsibles.index', compact('cycles'));
     }
 }

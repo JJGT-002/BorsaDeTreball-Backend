@@ -14,7 +14,7 @@ class StudentCycleRequest extends FormRequest
 
     public function rules(): array
     {
-        $studentCycleId = $this->route('studentCycle') ? $this->route('studentCycle')->id : null;
+        $studentCycleId = $this->route('studentCycles') ? $this->route('studentCycles')->id : null;
 
         return [
             'cycle_id' => [

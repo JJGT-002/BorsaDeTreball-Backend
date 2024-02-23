@@ -23,10 +23,6 @@ class UserController extends Controller {
     public function store(UserRequest $request): JsonResponse {
         try {
             DB::beginTransaction();
-            do {
-                $numbers = str_pad(mt_rand(0, 99), 2, '0', STR_PAD_LEFT);
-                $token = $numbers . '|' . Str::random(40);
-            } while (User::where('token', $token)->exists());
             $user = new User([
                 'email' => $request['email'],
                 'password' => bcrypt($request['password']),
@@ -34,9 +30,16 @@ class UserController extends Controller {
                 'accept' => $request['accept'],
                 'role' => 'responsible',
                 'isActivated' => 1,
-                'token' => $token,
-            ]);
+                ]);
             $user->save();
+
+            do {
+                $token = $user->createToken('Personal Access Token')->plainTextToken;
+            } while (User::where('token', $token)->exists());
+
+            $user->forceFill([
+                'token' => $token,
+            ])->save();
 
             DB::commit();
             return response()->json([

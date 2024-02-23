@@ -7,6 +7,9 @@ use App\Http\Resources\CycleResource;
 use App\Http\Resources\DefaultCollection;
 use App\Models\Cycle;
 use App\Models\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 
 class CycleController extends Controller {
 
@@ -26,6 +29,12 @@ class CycleController extends Controller {
         return $data;
     }
 
+    public function getAllCycles(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $cycles = Cycle::all();
+        return view('cycles.index', compact('cycles'));
+    }
+
     public function getCyclesByResponsibleUserId($userId) {
         // Obtener el usuario responsable
         $user = User::findOrFail($userId);
@@ -33,6 +42,6 @@ class CycleController extends Controller {
         // Obtener los ciclos asociados al usuario responsable
         $cycles = $user->cycles;
 
-        return view('responsibles.index', compact('cycles'));
+        return view('cycles.index', compact('cycles'));
     }
 }

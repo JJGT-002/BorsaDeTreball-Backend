@@ -48,7 +48,7 @@
 
 
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900">{{ $responsible->observations }}</div>
+                                                    <a href="{{ route('cycles.index', $responsible->id) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Ver ciclos</a>
                                                 </td>
 
 

@@ -45,10 +45,11 @@ Route::get('jobOffers/indexByCompany/{id}', [JobOfferController::class, 'indexBy
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.callback');
 
-Route::get('/responsibles', [StudentCycleController::class, 'getResponsibles'])->name('responsible.students');
+Route::get('/responsibles', [StudentCycleController::class, 'getResponsibles']);
 Route::get('/responsible/students/{responsibleId}', [StudentCycleController::class, 'getStudentsByResponsibleCycleId'])->name('responsible.students');
 
-Route::get('/cycles', [CycleController::class, 'getCyclesByResponsibleUserId'])->name('responsible.students');
+Route::get('/cycles/{userId}', [CycleController::class, 'getCyclesByResponsibleUserId'])->name('cycles.index');
+Route::get('/cycles', [CycleController::class, 'getAllCycles'])->name('cycles.getAllCycles');
 
 
 require __DIR__.'/auth.php';

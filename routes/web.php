@@ -54,4 +54,6 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 
 Route::get('/responsible/students/{responsibleId}', [StudentCycleController::class, 'getStudentsByResponsibleCycleId'])->name('responsible.students');
 
+Route::get('cycles/responsible/{responsibleId}', [ResponsibleController::class, 'showCyclesOfAResponsible'])->name('responsible.cycles');
+
 require __DIR__.'/auth.php';

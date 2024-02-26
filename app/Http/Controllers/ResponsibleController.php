@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cycle;
 use App\Models\ResponsibleCycle;
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -138,5 +139,14 @@ class ResponsibleController extends Controller
     {
         $responsible->delete();
         return redirect()->route('responsibles.index')->with('success', 'Responsable eliminado correctamente');
+    }
+
+    public function showCyclesOfAResponsible($responsibleId): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $cycleIds = ResponsibleCycle::where('responsible_id', $responsibleId)->pluck('cycle_id');
+
+        $cyclesByResponsibleUserId = Cycle::whereIn('id', $cycleIds)->get();
+
+        return view('cycles.indexCyclesByResponsibleUserId', compact('cyclesByResponsibleUserId','responsibleId'));
     }
 }

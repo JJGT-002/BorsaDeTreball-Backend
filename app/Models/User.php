@@ -48,4 +48,14 @@ class User extends Authenticatable {
     public function cycles(): BelongsToMany {
         return $this->belongsToMany(Cycle::class, 'responsible_cycles', 'responsible_id', 'cycle_id');
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isResponsible(): bool
+    {
+        return $this->role === 'responsible';
+    }
 }

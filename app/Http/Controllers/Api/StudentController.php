@@ -93,13 +93,30 @@ class StudentController extends Controller {
 
             DB::beginTransaction();
 
-            $student->update($request->except('password', 'address','isActivated'));
+            if ($request->filled('name')) {
+                $student->name = $request->name;
+            }
 
-            $user->update([
-                'password' => bcrypt($request->input('password')),
-                'address' => $request->input('address'),
-                'isActivated' => $request->input('isActivated')
-            ]);
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->password);
+            }
+            if ($request->filled('address')) {
+                $user->address = $request->address;
+            }
+            if ($request->filled('isActivated')) {
+                $user->isActivated = $request->isActivated;
+            }
+
+            $student->save();
+            $user->save();
+
+            $student->cycle()->detach();
+
+            if ($request->filled('cycle_endDate_ids') && is_array($request->cycle_endDate_ids)) {
+                foreach ($request->cycle_endDate_ids as $cycleData) {
+                    $student->cycle()->attach($cycleData['cycle'], ['endDate' => $cycleData['endDate']]);
+                }
+            }
 
             DB::commit();
 

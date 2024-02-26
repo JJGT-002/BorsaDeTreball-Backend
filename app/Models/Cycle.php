@@ -31,6 +31,10 @@ class Cycle extends Model {
         return $this->belongsTo(ProfessionalFamily::class,'departamento','id');
     }
 
+    public function responsible(): BelongsToMany {
+        return $this->belongsToMany(User::class,'responsible_cycles','cycle_id','responsible_id');
+    }
+
     public function student(): BelongsToMany {
         return $this->belongsToMany(Student::class, 'student_cycles', 'cycle_id', 'student_id');
     }

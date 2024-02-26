@@ -24,11 +24,22 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('responsibles.index')" :active="request()->routeIs('responsibles.index')">
+                        {{ __('Lista de Responsables') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('cycles.index')" :active="request()->routeIs('cycles.index')">
+                        {{ __('Lista de Ciclos') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('offerCycles.index')" :active="request()->routeIs('offerCycles.index')">
                         {{ __('Estadísticas') }}
                     </x-nav-link>
                 </div>
-
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">

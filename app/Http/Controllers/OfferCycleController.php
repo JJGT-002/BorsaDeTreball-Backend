@@ -20,7 +20,6 @@ class OfferCycleController extends Controller
     public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $cycles = Cycle::all();
-
         return view('layouts.chart', compact('cycles'));
     }
 

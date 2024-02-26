@@ -8,7 +8,6 @@ use App\Http\Resources\DefaultCollection;
 use App\Http\Resources\StudentCycleResource;
 use App\Models\Cycle;
 use App\Models\ResponsibleCycle;
-use App\Models\Student;
 use App\Models\StudentCycle;
 use App\Models\User;
 use Exception;
@@ -61,11 +60,6 @@ class StudentCycleController extends Controller {
         }
     }
 
-    public function getResponsibles() {
-        $responsibles = User::where('role', 'responsible')->get();
-        return view('responsibles.index', compact('responsibles'));
-    }
-
     public function getStudentsByResponsibleCycleId($responsibleId) {
         $cycleId = ResponsibleCycle::where('responsible_id', $responsibleId)->value('cycle_id');
         $cycle = Cycle::find($cycleId);
@@ -74,4 +68,28 @@ class StudentCycleController extends Controller {
 
         return view('studentCycles.index', compact('students'));
     }
+
+    public function getCyclesByStudentId($studentId): JsonResponse
+    {
+        try {
+            $cycles = StudentCycle::where('student_id', $studentId)->get();
+            $transformedData = $cycles->map(function ($studentCycle) {
+                return [
+                    'cycle_id' => $studentCycle->cycle_id,
+                    'cliteral' => Cycle::where('id',$studentCycle->cycle_id)->first()->cliteral,
+                    'endDate' => $studentCycle->endDate,
+                ];
+            });
+            return response()->json([
+                'message' => 'Student Cycles found',
+                'data' => $transformedData,
+            ], ResponseAlias::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Failed to fetch student cycles',
+                'message' => $e->getMessage()
+            ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\OfferCycleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResponsibleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,16 +41,17 @@ Route::resource('companies', CompanyController::class);
 Route::resource('users', \App\Http\Controllers\UserController::class);
 Route::resource('jobOffers', JobOfferController::class);
 Route::resource('offerCycles', OfferCycleController::class);
+Route::resource('responsibles', ResponsibleController::class);
+Route::resource('cycles', \App\Http\Controllers\CycleController::class);
 
 Route::get('jobOffers/indexByCompany/{id}', [JobOfferController::class, 'indexByCompany'])->name('jobOffers.indexByCompany');
+Route::get('responsibles/indexCyclesByResponsible/{id}', [ResponsibleController::class, 'getCyclesByResponsibleUserId'])->name('responsibles.indexCyclesByResponsible');
+Route::get('responsibles/indexCyclesWithoutResponsible/{id}', [ResponsibleController::class, 'getCyclesWithoutResponsible'])->name('responsibles.indexCyclesWithoutResponsible');
+Route::get('responsibles/assignResponsibleWithCycle/{responsibleId}/{cycleId}', [ResponsibleController::class, 'assignResponsibleWithCycle'])->name('responsibles.assignResponsibleWithCycle');
+Route::get('responsibles/delete/{responsibleId}/{cycleId}', [ResponsibleController::class, 'delete'])->name('responsibles.delete');
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.callback');
 
-Route::get('/responsibles', [StudentCycleController::class, 'getResponsibles']);
 Route::get('/responsible/students/{responsibleId}', [StudentCycleController::class, 'getStudentsByResponsibleCycleId'])->name('responsible.students');
-
-Route::get('/cycles/{userId}', [CycleController::class, 'getCyclesByResponsibleUserId'])->name('cycles.index');
-Route::get('/cycles', [CycleController::class, 'getAllCycles'])->name('cycles.getAllCycles');
-
 
 require __DIR__.'/auth.php';

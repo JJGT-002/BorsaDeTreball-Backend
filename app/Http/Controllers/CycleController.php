@@ -10,39 +10,22 @@ use Illuminate\Http\Request;
 
 class CycleController extends Controller
 {
-    public function indexAll(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $cycles = Cycle::all();
-        return view('cycles.index',compact('cycles'));
+        $search = $request->input('search');
+
+        if ($search) {
+            $cycles = Cycle::where('ciclo', 'LIKE', "%$search%")->paginate(10);
+        } else {
+            $cycles = Cycle::paginate(10);
+        }
+
+        return view('cycles.index', compact('cycles', 'search'));
     }
 
-    public function create()
+    public function show($cycleId): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
+        $cycle = Cycle::where('id',$cycleId)->first();
+        return view('cycles.show', compact('cycle'));
     }
 }

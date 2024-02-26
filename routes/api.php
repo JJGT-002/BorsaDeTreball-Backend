@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('jobOffers', JobOfferController::class);
     Route::apiResource('offerCycles', OfferCycleController::class);
     Route::apiResource('studentEnrolledOffers', StudentEnrolledOfferController::class);
+    Route::get('studentCycles/{studentId}', [StudentCycleController::class, 'getCyclesByStudentId']);
     Route::apiResource('studentCycles', StudentCycleController::class);
     Route::apiResource('responsibleCycles', ResponsibleCycleController::class);
 });

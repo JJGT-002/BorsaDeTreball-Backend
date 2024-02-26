@@ -28,20 +28,4 @@ class CycleController extends Controller {
         $data['status'] = 'success';
         return $data;
     }
-
-    public function getAllCycles(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $cycles = Cycle::all();
-        return view('cycles.index', compact('cycles'));
-    }
-
-    public function getCyclesByResponsibleUserId($userId) {
-        // Obtener el usuario responsable
-        $user = User::findOrFail($userId);
-
-        // Obtener los ciclos asociados al usuario responsable
-        $cycles = $user->cycles;
-
-        return view('cycles.index', compact('cycles'));
-    }
 }

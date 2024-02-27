@@ -35,7 +35,7 @@ class Cycle extends Model {
         return $this->belongsToMany(User::class,'responsible_cycles','cycle_id','responsible_id');
     }
 
-    public function student(): BelongsToMany {
+    public function students(): BelongsToMany {
         return $this->belongsToMany(Student::class, 'student_cycles', 'cycle_id', 'student_id');
     }
 

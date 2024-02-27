@@ -12,9 +12,9 @@ add('writable_dirs', ['bootstrap/cache', 'storage']);
 
 // Hosts
 host('18.211.111.52')
-    ->set('remote_user', 'ubuntu')
+    ->set('remote_user', 'deployer')
     ->set('identityFile', '/home/batoi/Escritorio/DDAW-KEY-PROJECTEG1.pem')
-    ->set('deploy_path', '/var/www/BolsaTrabajoBatoi/html/');
+    ->set('deploy_path', '/var/www/BolsaTrabajoBatoi/html/current/public');
 
 // Hooks
 after('deploy:failed', 'deploy:unlock');

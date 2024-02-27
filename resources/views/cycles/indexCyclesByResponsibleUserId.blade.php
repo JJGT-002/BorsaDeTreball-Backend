@@ -32,7 +32,11 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center justify-center">
                                         <a href="{{ route('cycles.show', $cycle) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Ver</a>
-                                        <a href="{{ route('responsibles.delete', ['responsibleId' => $responsibleId, 'cycleId' => $cycle->id]) }}" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">Quitar</a>
+                                        @if($showRemoveButton)
+                                            <a href="{{ route('responsibles.delete', ['responsibleId' => $responsibleId, 'cycleId' => $cycle->id]) }}" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">Quitar</a>
+                                        @endif
+                                        <a href="{{ route('students.indexStudentsByCycleId', $cycle->id) }}" class="inline-block bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded mr-2">Ver alumnos</a>
+                                        <a href="{{ route('cycles.indexJobOffersByCycle', $cycle->id) }}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">Ver Ofertas de Trabajo</a>
                                     </div>
                                 </td>
                             </tr>

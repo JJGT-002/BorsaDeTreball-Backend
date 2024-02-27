@@ -48,7 +48,9 @@ class ResponsibleController extends Controller
 
         $cyclesByResponsibleUserId = $cyclesByResponsibleUserId->paginate(10);
 
-        return view('cycles.indexCyclesByResponsibleUserId', compact('cyclesByResponsibleUserId', 'responsibleId', 'search'));
+        $showRemoveButton = true;
+
+        return view('cycles.indexCyclesByResponsibleUserId', compact('cyclesByResponsibleUserId', 'responsibleId', 'search','showRemoveButton'));
     }
 
     public function getCyclesWithoutResponsible($responsibleId): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -141,12 +143,13 @@ class ResponsibleController extends Controller
         return redirect()->route('responsibles.index')->with('success', 'Responsable eliminado correctamente');
     }
 
-    public function showCyclesOfAResponsible($responsibleId): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $cycleIds = ResponsibleCycle::where('responsible_id', $responsibleId)->pluck('cycle_id');
+    public function showCyclesOfAResponsible($responsibleId): View|Application|Factory|\Illuminate\Contracts\Foundation\Application {
+        $cycleIds = ResponsibleCycle::where('responsible_id', $responsibleId)->pluck('cycle_id')->toArray();
 
-        $cyclesByResponsibleUserId = Cycle::whereIn('id', $cycleIds)->get();
+        $cyclesByResponsibleUserId = Cycle::whereIn('id', $cycleIds)->paginate(10);
 
-        return view('cycles.indexCyclesByResponsibleUserId', compact('cyclesByResponsibleUserId','responsibleId'));
+        $showRemoveButton = false;
+
+        return view('cycles.indexCyclesByResponsibleUserId', compact('cyclesByResponsibleUserId', 'responsibleId','showRemoveButton'));
     }
 }

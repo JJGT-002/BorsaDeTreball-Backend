@@ -53,7 +53,7 @@ Route::get('responsibles/delete/{responsibleId}/{cycleId}', [ResponsibleControll
 Route::get('cycles/responsible/{responsibleId}', [ResponsibleController::class, 'showCyclesOfAResponsible'])->name('responsible.cycles');
 Route::get('students/indexJobOffersByCycle/{cycleId}', [StudentController::class, 'indexJobOffersByCycle'])->name('cycles.indexJobOffersByCycle');
 Route::get('students/indexStudentsByCycleId/{cycleId}', [StudentController::class, 'indexStudentsByCycleId'])->name('students.indexStudentsByCycleId');
-Route::delete('students/{student}/{cycleId}', [StudentController::class, 'destroy'])->name('students.destroy');
+//Route::delete('students/{student}/{cycleId}', [StudentController::class, 'destroy'])->name('students.destroy');
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.callback');
 

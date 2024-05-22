@@ -3,30 +3,27 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 
-// Configuración
-set('repository', 'https://github.com/BorsaDeTreball-ProyectoFinal/BorsaDeTreball-Backend.git');
+// Config
 
-add('shared_files', ['.env', 'docker-compose.yml']);
-add('shared_dirs', ['storage', 'public/uploads']);
+set('repository', 'https://github.com/JJGT-002/BorsaDeTreball-Backend.git');
+
+add('shared_files', ['database/database.sqlite', '.env']);
+add('shared_dirs', ['bootstrap/cache', 'storage']);
 add('writable_dirs', ['bootstrap/cache', 'storage']);
 
 // Hosts
-host('18.211.111.52')
-    ->set('remote_user', 'deployer')
-    ->set('identityFile', '/home/batoi/Escritorio/DDAW-KEY-PROJECTEG1.pem')
-    ->set('deploy_path', '/var/www/BolsaTrabajoBatoi/html/current/public');
 
-// Hooks
-after('deploy:failed', 'deploy:unlock');
+host('44.199.122.46')
+    ->set('remote_user', 'borsadetreball-back-deploy')
+    ->set('identity_file', '~/.ssh/id_rsa')
+    ->set('deploy_path', '~/var/www')
+    ->set('keep_releases', 3);
 
-// Tarea para subir el archivo .env
-task('upload:env', function () {
-    upload('.env.production', '{{deploy_path}}/shared/.env');
-})->desc('Environment setup');
-
-// Tarea para recargar PHP-FPM
 task('reload:php-fpm', function () {
-    run('sudo /etc/init.d/php8.2-fpm restart');
+    run('sudo /etc/init.d/php8.3-fpm restart');
 });
-// Inclusión en el ciclo de despliegue
+
 after('deploy', 'reload:php-fpm');
+// Hooks
+
+after('deploy:failed', 'deploy:unlock');
